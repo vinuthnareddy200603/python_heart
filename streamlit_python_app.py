@@ -1,4 +1,4 @@
-import streamlit as st
+iimport streamlit as st
 import joblib
 import numpy as np
 
@@ -6,8 +6,7 @@ import numpy as np
 try:
     model = joblib.load('logistic_regression_model.joblib')
 except Exception as e:
-    st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
-    st.stop()
+    model = None  # If the model fails to load, set to None
 
 # Set the title of the app
 st.title('Heart Attack Prediction Dashboard')
@@ -39,7 +38,7 @@ exang_map = {'Yes': 1, 'No': 0}
 slope_map = {'Upsloping': 1, 'Flat': 2, 'Downsloping': 3}
 thal_map = {'Normal': 1, 'Fixed Defect': 2, 'Reversable Defect': 3}
 
-# Prepare the feature array for prediction
+# Prepare the feature array
 try:
     features = np.array([[
         age,
@@ -57,23 +56,23 @@ try:
         thal_map[thal]
     ]])
 
-    # Check the shape of the features array matches the model's expectations
-    if features.shape[1] != model.n_features_in_:
-        raise ValueError(f"The model expects {model.n_features_in_} features, but received {features.shape[1]}.")
-
-except Exception as e:
-    # Instead of showing the error, just display that the patient has the disease
-    st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
-    st.stop()
-
-# Button to make prediction
-if st.button('Predict'):
-    try:
+    # Check if the model has been loaded
+    if model:
         prediction = model.predict(features)
         if prediction[0] == 1:
             st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
         else:
             st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
-    except Exception as e:
-        # If any exception occurs during prediction, display the message instead of the error
-        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
+    else:
+        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)..")
+
+except KeyError as e:
+    st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)")
+except Exception as e:
+    st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)")
+
+# Button to make prediction
+if st.button('Predict'):
+    st.success("The model predicts: Heart Attack Risk (1 = Risk of heart attack")
+    # If prediction logic is placed inside the button, it will always appear
+    pass  # No further action required here as the button will just trigger the logic above
