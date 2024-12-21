@@ -3,7 +3,11 @@ import joblib
 import numpy as np
 
 # Load the saved Logistic Regression model
-model = joblib.load('logistic_regression_model.joblib')
+try:
+    model = joblib.load('logistic_regression_model.joblib')
+except Exception as e:
+    st.error(f"Error loading the model: {e}")
+    st.stop()
 
 # Set the title of the app
 st.title('Heart Attack Prediction Dashboard')
@@ -13,8 +17,8 @@ st.write('Enter the following parameters to predict the likelihood of a heart at
 
 # Collect input from the user
 age = st.number_input('Age (in years)', min_value=0, max_value=120, value=25)
-sex = st.selectbox('Sex', ['Male', 'Female'])  # This could be a binary or categorical value
-cp = st.selectbox('Chest Pain Type', ['Typical Angina', 'Atypical Angina', 'Non-anginal pain', 'Asymptomatic']) 
+sex = st.selectbox('Sex', ['Male', 'Female'])
+cp = st.selectbox('Chest Pain Type', ['Typical Angina', 'Atypical Angina', 'Non-anginal pain', 'Asymptomatic'])
 trestbps = st.number_input('Resting Blood Pressure (mm Hg)', min_value=0, max_value=300, value=120)
 chol = st.number_input('Serum Cholesterol (mg/dl)', min_value=0, max_value=700, value=200)
 fbs = st.selectbox('Fasting Blood Sugar > 120 mg/dl', ['Yes', 'No'])
@@ -26,7 +30,7 @@ slope = st.selectbox('Slope of the Peak Exercise ST Segment', ['Upsloping', 'Fla
 ca = st.number_input('Number of Major Vessels Colored by Fluoroscopy', min_value=0, max_value=4, value=1)
 thal = st.selectbox('Thalassemia', ['Normal', 'Fixed Defect', 'Reversable Defect'])
 
-# Map the categorical inputs to numeric values if necessary for model compatibility
+# Map the categorical inputs to numeric values
 sex_map = {'Male': 1, 'Female': 0}
 cp_map = {'Typical Angina': 1, 'Atypical Angina': 2, 'Non-anginal pain': 3, 'Asymptomatic': 4}
 fbs_map = {'Yes': 1, 'No': 0}
@@ -54,10 +58,12 @@ features = np.array([[
 
 # Button to make prediction
 if st.button('Predict'):
-    prediction = model.predict(features)
-    
-    # Show the result
-    if prediction[0] == 1:
-        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
-    else:
-        st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
+    try:
+        prediction = model.predict(features)
+        if prediction[0] == 1:
+            st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
+        else:
+            st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {e}")
+        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack) by default due to an error.")
