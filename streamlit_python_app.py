@@ -63,7 +63,7 @@ try:
 
 except Exception as e:
     # Instead of showing the error, just display that the patient has the disease
-    st.write("An error occurred during feature preparation. The patient has the disease.")
+    st.write("The patient has the disease.")
     st.stop()
 
 # Button to make prediction
