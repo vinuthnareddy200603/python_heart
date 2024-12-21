@@ -66,15 +66,27 @@ if st.button('Predict'):
     try:
         # Check if the model has been loaded
         if model:
-            if trestbps > 140:  # If blood pressure is greater than 140, display a warning
-                st.success("The patient has a risk of heart attack due to high blood pressure.")
+            # Cholesterol risk check: if less than 200, "No Risk", else "Risk"
+            if chol < 200:
+                st.write("Cholesterol is in the safe range: No Heart Attack Risk.")
             else:
-                prediction = model.predict(features)
-                if prediction[0] == 1:
-                    st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
-                else:
-                    st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
+                st.write("Cholesterol is high: Risk of heart attack.")
+
+            # Heart rate risk check: Calculate max heart rate based on age
+            max_heart_rate = 220 - age
+            target_heart_rate = max_heart_rate * 0.5  # 50% exertion
+            if thalach < target_heart_rate:
+                st.write("Heart rate is safe for your age: No Heart Attack Risk.")
+            else:
+                st.write("Heart rate is high: Risk of heart attack.")
+                
+            # Model prediction logic
+            prediction = model.predict(features)
+            if prediction[0] == 1:
+                st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
+            else:
+                st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
         else:
-            st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
+            st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
     except Exception as e:
-        st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
+        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
