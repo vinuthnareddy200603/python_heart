@@ -67,12 +67,12 @@ try:
         st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)..")
 
 except KeyError as e:
-    st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)")
+    st.write(".")
 except Exception as e:
-    st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)")
+    st.write(".")
 
 # Button to make prediction
 if st.button('Predict'):
-    st.success("The model predicts: Heart Attack Risk (1 = Risk of heart attack")
+    st.success("The model predicts: No Heart Attack Risk (0 = No risk).")
     # If prediction logic is placed inside the button, it will always appear
     pass  # No further action required here as the button will just trigger the logic above
