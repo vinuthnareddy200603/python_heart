@@ -88,5 +88,6 @@ if st.button('Predict'):
                 st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
         else:
             st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
+            break
     except Exception as e:
         st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
