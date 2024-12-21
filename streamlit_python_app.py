@@ -67,9 +67,9 @@ try:
         st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)..")
 
 except KeyError as e:
-    st.write(".")
+    st.write(" ")
 except Exception as e:
-    st.write(".")
+    st.write(" ")
 
 # Button to make prediction
 if st.button('Predict'):
