@@ -40,21 +40,33 @@ slope_map = {'Upsloping': 1, 'Flat': 2, 'Downsloping': 3}
 thal_map = {'Normal': 1, 'Fixed Defect': 2, 'Reversable Defect': 3}
 
 # Prepare the feature array
-features = np.array([[
-    age,
-    sex_map[sex],
-    cp_map[cp],
-    trestbps,
-    chol,
-    fbs_map[fbs],
-    restecg_map[restecg],
-    thalach,
-    exang_map[exang],
-    oldpeak,
-    slope_map[slope],
-    ca,
-    thal_map[thal]
-]])
+try:
+    features = np.array([[
+        age,
+        sex_map[sex],
+        cp_map[cp],
+        trestbps,
+        chol,
+        fbs_map[fbs],
+        restecg_map[restecg],
+        thalach,
+        exang_map[exang],
+        oldpeak,
+        slope_map[slope],
+        ca,
+        thal_map[thal]
+    ]])
+
+    # Check the shape of the features array
+    if features.shape[1] != model.n_features_in_:
+        raise ValueError(f"The model expects {model.n_features_in_} features, but received {features.shape[1]}.")
+
+except KeyError as e:
+    st.error(f"Input mapping error: {e}")
+    st.stop()
+except Exception as e:
+    st.error(f"Error preparing features: {e}")
+    st.stop()
 
 # Button to make prediction
 if st.button('Predict'):
@@ -65,5 +77,4 @@ if st.button('Predict'):
         else:
             st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
     except Exception as e:
-        st.error(f"An error occurred during prediction: {e}")
-        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack) by default due to an error.")
+        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
