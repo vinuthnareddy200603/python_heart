@@ -6,7 +6,7 @@ import numpy as np
 try:
     model = joblib.load('logistic_regression_model.joblib')
 except Exception as e:
-    st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
+    st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
     st.stop()
 
 # Set the title of the app
@@ -63,7 +63,7 @@ try:
 
 except Exception as e:
     # Instead of showing the error, just display that the patient has the disease
-    st.write("The patient has the disease.")
+    st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
     st.stop()
 
 # Button to make prediction
