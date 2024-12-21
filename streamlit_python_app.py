@@ -56,16 +56,6 @@ try:
         thal_map[thal]
     ]])
 
-    # Check if the model has been loaded
-    if model:
-        prediction = model.predict(features)
-        if prediction[0] == 1:
-            st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
-        else:
-            st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
-    else:
-        st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack)..")
-
 except KeyError as e:
     st.write(" ")
 except Exception as e:
@@ -73,6 +63,18 @@ except Exception as e:
 
 # Button to make prediction
 if st.button('Predict'):
-    st.success("The model predicts: No Heart Attack Risk (0 = No risk).")
-    # If prediction logic is placed inside the button, it will always appear
-    pass  # No further action required here as the button will just trigger the logic above
+    try:
+        # Check if the model has been loaded
+        if model:
+            if trestbps > 140:  # If blood pressure is greater than 140, display a warning
+                st.success("The patient has a risk of heart attack due to high blood pressure.")
+            else:
+                prediction = model.predict(features)
+                if prediction[0] == 1:
+                    st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
+                else:
+                    st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
+        else:
+            st.write("The model predicts: Heart Attack Risk (1 = Risk of heart attack).")
+    except Exception as e:
+        st.write("The model predicts: No Heart Attack Risk (0 = No risk).")
